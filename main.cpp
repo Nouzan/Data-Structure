@@ -2,6 +2,7 @@
 #include<memory>
 #include"data-structure/Stack.h"
 #include "data-structure/Queue.h"
+#include "data-structure/LinkList.h"
 #include "data-structure/Node.h"
 
 void testQueue1() {
@@ -73,7 +74,38 @@ void testStack() {
 	}
 }
 
+void testLinkList() {
+	LinkList<char> l;
+	for(;;) {
+		int c, arg1;
+		char arg2;
+		std::cin >> c;
+		switch (c) {
+			case 0:
+				return;
+			case 1:
+				std::cin >> arg1 >> arg2;
+				l.Insert(arg2, arg1);
+				std::cout << "Insert: " << arg2 << " At: " << arg1 << std::endl;
+				break;
+			case 2:
+				std::cin >> arg1;
+				std::cout << "Delete: " << l.Delete(arg1) << " At: " << arg1 << std::endl;
+				break;
+			case 3:
+				std::cout << "IsEmpty: " << l.IsEmpty() << std::endl;
+				break;
+			case 4:
+				std::cin >> arg1;
+				std::cout << "Got: " << l.Get(arg1) << " At: " << arg1 << std::endl;
+				break;
+			default:
+				;
+		}
+	}
+}
+
 int main() {
-	testStack();
+	testLinkList();
 	return 0;
 }
