@@ -26,7 +26,7 @@ public:
 
 	DataType Pop() {
 		if (!IsEmpty()) {
-			DataType data = top->data;
+			DataType data = top->key;
 			linkList.Delete(1);
 			top = linkList.GetHead();
 			return data;
@@ -37,7 +37,7 @@ public:
 
 	DataType GetTop() const {
 		if (!IsEmpty())
-			return top->data;
+			return top->key;
 		else
 			throw "Stack::栈空";
 	}

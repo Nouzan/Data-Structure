@@ -3,21 +3,21 @@
 #include<memory>
 #include "Node.h"
 
-template<typename DataType, typename KeyType=int>
-struct LinkListNode : Node<DataType, KeyType> {
-	std::shared_ptr<LinkListNode<DataType, KeyType>> next;
-	std::shared_ptr<LinkListNode<DataType, KeyType>> prev;
+template<typename KeyType, typename DataType=int>
+struct LinkListNode : Node<KeyType, DataType> {
+	std::shared_ptr<LinkListNode<KeyType, DataType>> next;
+	std::shared_ptr<LinkListNode<KeyType, DataType>> prev;
 
 	LinkListNode() : next(nullptr), prev(nullptr) {}
 
-	LinkListNode(const DataType &data) : Node<DataType, KeyType>(data), next(nullptr), prev(nullptr) {
+	LinkListNode(const KeyType &k) : Node<KeyType, DataType>(k), next(nullptr), prev(nullptr) {
 		//std::cout << data << std::endl;
 	}
 
-	LinkListNode(const LinkListNode<DataType, KeyType> &rhs) : Node<DataType, KeyType>(rhs), next(rhs.next), prev(rhs.prev) {
+	LinkListNode(const LinkListNode<KeyType, DataType> &rhs) : Node<KeyType, DataType>(rhs), next(rhs.next), prev(rhs.prev) {
 	}
 
-	LinkListNode<DataType, KeyType>& operator=(const LinkListNode<DataType, KeyType> &rhs) {
+	LinkListNode<KeyType, DataType>& operator=(const LinkListNode<KeyType, DataType> &rhs) {
 		this->key = rhs.key;
 		this->data = rhs.data;
 		next = rhs.next;
@@ -61,7 +61,7 @@ public:
 	LinkList(const LinkList<DataType> &rhs) : LinkList() {
 		auto head = rhs.nil->next;
 		while (head != rhs.nil) {
-			Insert(head->data);
+			Insert(head->key);
 			head = head->next;
 		}
 	}
@@ -74,7 +74,7 @@ public:
 		}
 		head = rhs.nil->next;
 		while (head != rhs.nil) {
-			Insert(head->data);
+			Insert(head->key);
 			head = head->next;
 		}
 		return *this;
@@ -111,7 +111,7 @@ public:
 		if (p && p != nil) {
 			p->prev->next = p->next;
 			p->next->prev = p->prev;
-			return p->data;
+			return p->key;
 			length --;
 		}
 		throw "error";
@@ -120,7 +120,7 @@ public:
 	DataType Get(int index) {
 		auto p = get(index);
 		if (p)
-			return p->data;
+			return p->key;
 		else
 			throw "error";
 	}

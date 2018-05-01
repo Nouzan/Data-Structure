@@ -37,7 +37,7 @@ public:
 	Queue<T>& operator=(const Queue<T> &rhs) {
 		head = tail = 0;
 		for(int i = rhs.head; i != rhs.tail; inc(i)) {
-			EnQueue(rhs.array[i].data);
+			EnQueue(rhs.array[i].key);
 		}
 		return *this;
 	}
@@ -62,11 +62,11 @@ public:
 			throw "error";
 		}
 
-		return array[inc(head)].data;
+		return array[inc(head)].key;
 	}
 
 	T GetHead() const {
-		return array[head].data;
+		return array[head].key;
 	}
 
 	bool IsEmpty() const {

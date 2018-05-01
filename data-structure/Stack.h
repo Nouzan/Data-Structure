@@ -38,14 +38,14 @@ public:
 
 	T Pop() {
 		if (!IsEmpty())
-			return array[top--].data;
+			return array[top--].key;
 		else
 			throw "Stack::栈空";
 	}
 
 	T GetTop() const {
 		if (!IsEmpty())
-			return array[top].data;
+			return array[top].key;
 		else
 			throw "Stack::栈空";
 	}
@@ -54,14 +54,14 @@ public:
 		top = -1;
 		array.reset(new Node[MAX_SIZE]);
 		for (int i = 0; i <= rhs.top; i ++) {
-			Push(rhs.array[i].data);
+			Push(rhs.array[i].key);
 		}
 	}
 
 	Stack<T>& operator=(const Stack& rhs) {
 		top = -1;
 		for (int i = 0; i <= rhs.top; i ++) {
-			Push(rhs.array[i].data);
+			Push(rhs.array[i].key);
 		}
 		return *this;
 	}
