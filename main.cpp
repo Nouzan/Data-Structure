@@ -4,6 +4,7 @@
 #include "data-structure/Queue.h"
 #include "data-structure/LinkList.h"
 #include "data-structure/Node.h"
+#include "data-structure/LinkStack.h"
 
 void testQueue1() {
 	Queue<int> queue(5);
@@ -116,7 +117,34 @@ void testLinkList2() {
 	std::cout << l3.Get(1) << std::endl;
 }
 
+void testLinkStack() {
+	LinkStack<int> s;
+	for(;;) {
+		int c, data;
+		std::cin >> c;
+		switch (c) {
+			case 0:
+				return;
+			case 1:
+				std::cin >> data;
+				s.Push(data);
+				std::cout << "Push: " << data << std::endl;
+				break;
+			case 2:
+				std::cout << "Pop: " << s.Pop() << std::endl;
+				break;
+			case 3:
+				std::cout << "IsEmpty: " << s.IsEmpty() << std::endl;
+				break;
+			case 4:
+				std::cout << "Top: " << s.GetTop() << std::endl;
+			default:
+				;
+		}
+	}
+}
+
 int main() {
-	testLinkList2();
+	testLinkStack();
 	return 0;
 }

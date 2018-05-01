@@ -125,6 +125,10 @@ public:
 			throw "error";
 	}
 
+	std::shared_ptr<Node> GetHead() const {
+		return nil->next;
+	}
+
 	int Length() const {
 		return length;
 	}
