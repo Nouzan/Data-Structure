@@ -9,8 +9,8 @@ class LinkQueue {
 	LinkList<T> linkList;
 
 	void updateHeadTail() {
-		head = linkList.GetHead();
-		tail = linkList.GetTail();
+		head = linkList.GetTail();
+		tail = linkList.GetHead();
 	}
 
 public:
@@ -31,9 +31,9 @@ public:
 		return *this;
 	}
 
-	bool EnQueue(T data) {
-		linkList.Insert(data);
-		return true;
+	void EnQueue(T data) {
+		linkList.Insert(data, tail);
+		updateHeadTail();
 	}
 
 	T DeQueue() {
@@ -42,19 +42,18 @@ public:
 			throw "error";
 		}
 
-		return array[inc(head)].key;
+		T data = head->key;
+		linkList.Delete(head);
+		updateHeadTail();
+		return data;
 	}
 
 	T GetHead() const {
-		return array[head].key;
+		return head->key;
 	}
 
 	bool IsEmpty() const {
-		return head == tail;
-	}
-
-	bool IsFull() const {
-		return getInc(tail) == head;
+		return linkList.IsEmpty();
 	}
 
 };
