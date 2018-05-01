@@ -16,7 +16,7 @@ public:
 	~LinkStack() {}
 
 	void Push(DataType data) {
-		linkList.Insert(data);
+		linkList.Insert(data, top);
 		top = linkList.GetHead();
 	}
 
@@ -27,7 +27,8 @@ public:
 	DataType Pop() {
 		if (!IsEmpty()) {
 			DataType data = top->key;
-			linkList.Delete(1);
+			//std::cout << linkList.Length();
+			linkList.Delete(top);
 			top = linkList.GetHead();
 			return data;
 		}

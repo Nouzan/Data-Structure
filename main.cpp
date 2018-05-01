@@ -145,6 +145,6 @@ void testLinkStack() {
 }
 
 int main() {
-	testLinkList1();
+	testLinkStack();
 	return 0;
 }

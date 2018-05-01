@@ -94,8 +94,7 @@ public:
 		return nil->next == nil;
 	}
 
-	void Insert(const DataType &data, int index = 0) {
-		auto p = get(index);
+	void Insert(const DataType &data, std::shared_ptr<Node> p) {
 		if (p) {
 			auto q = std::make_shared<Node>(data);
 			q->prev = p->prev;
@@ -106,16 +105,26 @@ public:
 		}
 	}
 
-	DataType Delete(int index) {
+	void Insert(const DataType &data, int index = 0) {
 		auto p = get(index);
+		Insert(data, p);
+	}
+
+	DataType Delete(std::shared_ptr<Node> p) {
 		if (p && p != nil) {
 			p->prev->next = p->next;
 			p->next->prev = p->prev;
-			return p->key;
 			length --;
+			return p->key;
 		}
 		throw "error";
 	}
+
+	DataType Delete(int index) {
+		auto p = get(index);
+		return Delete(p);
+	}
+
 
 	DataType Get(int index) {
 		auto p = get(index);
@@ -127,6 +136,10 @@ public:
 
 	std::shared_ptr<Node> GetHead() const {
 		return nil->next;
+	}
+
+	std::shared_ptr<Node> GetTail() const {
+		return nil->prev;
 	}
 
 	int Length() const {
