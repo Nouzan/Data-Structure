@@ -1,11 +1,14 @@
+#pragma once
 #include<iostream>
 #include<memory>
+#include "Node.h"
 
 template<typename T>
 class Queue {
+	typedef Node<T> Node;
 	int head, tail;
 	const int QUEUE_SIZE;
-	std::unique_ptr<T[]> array;
+	std::unique_ptr<Node[]> array;
 
 	int inc(int &index) {
 		int old_index = index++;
@@ -20,7 +23,7 @@ class Queue {
 public:
 	Queue(int queue_size = 10000): QUEUE_SIZE(queue_size + 1) {
 		head = tail = 0;
-		array.reset(new T[QUEUE_SIZE]);
+		array.reset(new Node[QUEUE_SIZE]);
 	}
 
 	Queue(const Queue<T> &rhs): Queue(rhs.QUEUE_SIZE) {
@@ -34,7 +37,7 @@ public:
 	Queue<T>& operator=(const Queue<T> &rhs) {
 		head = tail = 0;
 		for(int i = rhs.head; i != rhs.tail; inc(i)) {
-			EnQueue(rhs.array[i]);
+			EnQueue(rhs.array[i].data);
 		}
 		return *this;
 	}
@@ -58,12 +61,12 @@ public:
 			std::cerr << "Queue: 队空" << std::endl;
 			throw "error";
 		}
-		
-		return array[inc(head)];
+
+		return array[inc(head)].data;
 	}
 
 	T GetHead() const {
-		return array[head];
+		return array[head].data;
 	}
 
 	bool IsEmpty() const {

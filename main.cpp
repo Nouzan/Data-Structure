@@ -2,6 +2,7 @@
 #include<memory>
 #include"data-structure/Stack.h"
 #include "data-structure/Queue.h"
+#include "data-structure/Node.h"
 
 void testQueue1() {
 	Queue<int> queue(5);
@@ -40,7 +41,39 @@ void testQueue2() {
 	std::cout << q3.DeQueue() << std::endl;
 }
 
-int main(){
-	testQueue1();
+void testNode() {
+	Node<int> n(1, 1);
+	n.Print();
+}
+
+void testStack() {
+	Stack<int> s;
+	for(;;) {
+		int c, data;
+		std::cin >> c;
+		switch (c) {
+			case 0:
+				return;
+			case 1:
+				std::cin >> data;
+				s.Push(data);
+				std::cout << "Push: " << data << std::endl;
+				break;
+			case 2:
+				std::cout << "Pop: " << s.Pop() << std::endl;
+				break;
+			case 3:
+				std::cout << "IsEmpty: " << s.IsEmpty() << std::endl;
+				break;
+			case 4:
+				std::cout << "IsFull: " << s.IsFull() << std::endl;
+			default:
+				;
+		}
+	}
+}
+
+int main() {
+	testStack();
 	return 0;
 }
