@@ -74,7 +74,7 @@ void testStack() {
 	}
 }
 
-void testLinkList() {
+void testLinkList1() {
 	LinkList<char> l;
 	for(;;) {
 		int c, arg1;
@@ -105,7 +105,18 @@ void testLinkList() {
 	}
 }
 
+void testLinkList2() {
+	LinkList<int> l1, l2;
+	l1.Insert(1);
+	l2.Insert(2);
+	std::cout << l2.Get(1) << std::endl;
+	l2 = l1;
+	std::cout << l2.Get(1) << std::endl;
+	LinkList<int> l3(l1);
+	std::cout << l3.Get(1) << std::endl;
+}
+
 int main() {
-	testLinkList();
+	testLinkList2();
 	return 0;
 }

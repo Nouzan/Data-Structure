@@ -29,6 +29,7 @@ struct LinkListNode : Node<DataType, KeyType> {
 template<typename DataType>
 class LinkList {
 	typedef LinkListNode<DataType> Node;
+	int length;
 	std::shared_ptr<Node> nil;
 
 	std::shared_ptr<Node> get(int index) const {
@@ -51,10 +52,32 @@ class LinkList {
 	}
 
 public:
-	LinkList() {
+	LinkList() : length(0) {
 		nil = std::make_shared<Node>();
 		nil->next = nil;
 		nil->prev = nil;
+	}
+
+	LinkList(const LinkList<DataType> &rhs) : LinkList() {
+		auto head = rhs.nil->next;
+		while (head != rhs.nil) {
+			Insert(head->data);
+			head = head->next;
+		}
+	}
+
+	LinkList<DataType>& operator=(const LinkList<DataType> &rhs) {
+		auto head = nil->next;
+		while (head != nil) {
+			Delete(1);
+			head = head->next;
+		}
+		head = rhs.nil->next;
+		while (head != rhs.nil) {
+			Insert(head->data);
+			head = head->next;
+		}
+		return *this;
 	}
 
 	~LinkList() {
@@ -79,6 +102,7 @@ public:
 			p->prev->next = q;
 			p->prev = q;
 			q->next = p;
+			length ++;
 		}
 	}
 
@@ -88,6 +112,7 @@ public:
 			p->prev->next = p->next;
 			p->next->prev = p->prev;
 			return p->data;
+			length --;
 		}
 		throw "error";
 	}
@@ -98,5 +123,9 @@ public:
 			return p->data;
 		else
 			throw "error";
+	}
+
+	int Length() const {
+		return length;
 	}
 };
