@@ -95,6 +95,17 @@ public:
 		return this->key;
 	}
 
+	void PreOrderPrint(NodePtr node = nullptr) {
+		if (node == nullptr) {
+			node = GetNodePtr();
+		}
+		if (node != nil) {
+			std::cout << node->GetKey();
+			PreOrderPrint(node->left);
+			PreOrderPrint(node->right);
+		}
+	}
+
 };
 
 template<typename KeyType, typename DataType>
