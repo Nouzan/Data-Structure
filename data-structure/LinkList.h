@@ -10,12 +10,9 @@ struct LinkListNode : Node<KeyType, DataType> {
 
 	LinkListNode() : next(nullptr), prev(nullptr) {}
 
-	LinkListNode(const KeyType &k) : Node<KeyType, DataType>(k), next(nullptr), prev(nullptr) {
-		//std::cout << data << std::endl;
-	}
+	LinkListNode(const KeyType &k) : Node<KeyType, DataType>(k), next(nullptr), prev(nullptr) {}
 
-	LinkListNode(const LinkListNode<KeyType, DataType> &rhs) : Node<KeyType, DataType>(rhs), next(rhs.next), prev(rhs.prev) {
-	}
+	LinkListNode(const LinkListNode<KeyType, DataType> &rhs) : Node<KeyType, DataType>(rhs), next(rhs.next), prev(rhs.prev) {}
 
 	LinkListNode<KeyType, DataType>& operator=(const LinkListNode<KeyType, DataType> &rhs) {
 		this->key = rhs.key;
