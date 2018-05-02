@@ -22,6 +22,8 @@ void testBinaryTree() {
 	std::cout << std::endl;
 	t1.PostOrderPrint();
 	std::cout << std::endl;
+	t1.LevelOrderPrint();
+	std::cout << std::endl;
 }
 
 void testQueue1() {

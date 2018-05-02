@@ -2,6 +2,7 @@
 #include<iostream>
 #include<memory>
 #include "Node.h"
+#include "LinkQueue.h"
 
 template<typename KeyType, typename DataType=int>
 class BinaryTree : Node<KeyType, DataType> {
@@ -125,6 +126,22 @@ public:
 			PostOrderPrint(node->left);
 			PostOrderPrint(node->right);
 			std::cout << node->GetKey();
+		}
+	}
+
+	void LevelOrderPrint(NodePtr node = nullptr) {
+		LinkQueue<NodePtr> queue;
+		if (node == nullptr) {
+			node = GetNodePtr();
+		}
+		queue.EnQueue(node);
+		while (!queue.IsEmpty()) {
+			auto tmp = queue.DeQueue();
+			if (tmp != nil) {
+				std::cout << tmp->GetKey();
+				queue.EnQueue(tmp->left);
+				queue.EnQueue(tmp->right);
+			}
 		}
 	}
 
