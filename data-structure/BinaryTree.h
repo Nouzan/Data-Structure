@@ -18,13 +18,6 @@ class BinaryTree : Node<KeyType, DataType> {
 		return child;
 	}
 
-	NodePtr getNodePtr() {
-		if (self == nullptr) {
-			self = NodePtr(this, deleteNode);
-		}
-		return self;
-	}
-
 public:
 	BinaryTree() :
 		Node<KeyType, DataType>(),
@@ -34,9 +27,16 @@ public:
 		parent(nil), right(nil), left(nil), root(nil), self(nullptr) {}
 	~BinaryTree() {}
 
+	NodePtr GetNodePtr() {
+		if (self == nullptr) {
+			self = NodePtr(this, deleteNode);
+		}
+		return self;
+	}
+
 	NodePtr GetRoot() {
 		if (root == nil && parent == nil) {
-			root = getNodePtr();
+			root = GetNodePtr();
 		}
 		if (root->parent != nil) {
 			root = parent->GetRoot();
@@ -52,6 +52,10 @@ public:
 		return right;
 	}
 
+	NodePtr GetParent() const {
+		return parent;
+	}
+
 	NodePtr SetLeftChild(KeyType key) {
 		auto child = newChild(key);
 		return SetLeftChild(child);
@@ -62,19 +66,29 @@ public:
 		return SetRightChild(child);
 	}
 
+	NodePtr SetLeftChild(NodeType &childNode) {
+		auto child = childNode.GetNodePtr();
+		return SetLeftChild(child);
+	}
+
+	NodePtr SetRightChild(NodeType &childNode) {
+		auto child = childNode.GetNodePtr();
+		return SetRightChild(child);
+	}
+
 	NodePtr SetLeftChild(NodePtr child) {
 		if (child->parent == nil && left == nil) {
 			left = child;
-			child->parent = getNodePtr();
+			child->parent = GetNodePtr();
 		}
-		return getNodePtr();
+		return GetNodePtr();
 	}
 	NodePtr SetRightChild(NodePtr child) {
 		if (child->parent == nil && right == nil) {
 			right = child;
-			child->parent = getNodePtr();
+			child->parent = GetNodePtr();
 		}
-		return getNodePtr();
+		return GetNodePtr();
 	}
 
 	KeyType GetKey() const {

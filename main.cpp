@@ -9,10 +9,13 @@
 #include "data-structure/BinaryTree.h"
 
 void testBinaryTree() {
-	BinaryTree<int> t1(1);
-	t1.SetLeftChild(2);
+	BinaryTree<char> t1('a'), t2('c');
+	t1.SetLeftChild('b');
+	t2.SetRightChild('d');
+	std::cout << t2.GetRoot()->GetKey() << std::endl;
+	t1.SetRightChild(t2);
 	std::cout << t1.GetKey() << std::endl;
-	std::cout << t1.GetRoot()->GetKey() << std::endl;
+	std::cout << t1.GetRightChild()->GetRoot()->GetKey() << std::endl;
 }
 
 void testQueue1() {
