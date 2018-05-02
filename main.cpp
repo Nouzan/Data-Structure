@@ -6,6 +6,14 @@
 #include "data-structure/Node.h"
 #include "data-structure/LinkStack.h"
 #include "data-structure/LinkQueue.h"
+#include "data-structure/BinaryTree.h"
+
+void testBinaryTree() {
+	BinaryTree<int> t1(1);
+	t1.SetLeftChild(2);
+	std::cout << t1.GetKey() << std::endl;
+	std::cout << t1.GetRoot()->GetKey() << std::endl;
+}
 
 void testQueue1() {
 	Queue<int> queue(5);
@@ -173,6 +181,6 @@ void testLinkQueue1() {
 }
 
 int main() {
-	testLinkQueue1();
+	testBinaryTree();
 	return 0;
 }

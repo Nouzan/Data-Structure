@@ -4,121 +4,91 @@
 #include "Node.h"
 
 template<typename KeyType, typename DataType=int>
-struct BinaryTreeNode : Node<KeyType, DataType> {
-	typedef std::shared_ptr<BinaryTreeNode<KeyType, DataType>> NodePtr;
-	std::shared_ptr<BinaryTreeNode<KeyType, DataType>> left, right, parent;
-	BinaryTreeNode(const KeyType &k) : Node<KeyType, DataType>(k), parent(nullptr), left(nullptr), right(nullptr) {}
-	BinaryTreeNode(const BinaryTreeNode<KeyType, DataType> &rhs) : Node<KeyType, DataType>(rhs), parent(rhs.parent), left(rhs.parent), right(rhs.parent) {}
-	BinaryTreeNode(
-		std::shared_ptr<BinaryTreeNode<KeyType, DataType>> p = nullptr,
-		std::shared_ptr<BinaryTreeNode<KeyType, DataType>> l = nullptr,
-		std::shared_ptr<BinaryTreeNode<KeyType, DataType>> r = nullptr
-	) : Node<KeyType, DataType>(), parent(p), left(l), right(r) {}
-	BinaryTreeNode<KeyType, DataType>&
-	operator=(const BinaryTreeNode<KeyType, DataType> &rhs) {
-		this->data = rhs.data;
-		this->key = rhs.key;
-		parent = rhs.parent;
-		left = rhs.left;
-		right = rhs.right;
-		return *this;
+class BinaryTree : Node<KeyType, DataType> {
+	typedef BinaryTree<KeyType, DataType> NodeType;
+	typedef std::shared_ptr<NodeType> NodePtr;
+	NodePtr parent, left, right, root, self;
+	static NodeType nilNode;
+	static NodePtr nil;
+
+	static void deleteNode(NodeType *n) { return; }
+
+	NodePtr newChild(const KeyType &key) {
+		auto child = std::make_shared<NodeType>(key);
+		return child;
 	}
 
-	//绑定parent, left, right
-	BinaryTreeNode<KeyType, DataType>&
-	Bind(
-		std::shared_ptr<BinaryTreeNode<KeyType, DataType>> p = nullptr,
-		std::shared_ptr<BinaryTreeNode<KeyType, DataType>> l = nullptr,
-		std::shared_ptr<BinaryTreeNode<KeyType, DataType>> r = nullptr
-	) {
-		parent = p;
-		left = l;
-		right = r;
-		return *this;
-	}
-
-	NodePtr SetLeftChild(NodePtr l) {
-		left = l;
-		if (l != nil)
-			l->parent = node;
-		return node;
-	}
-
-	NodePtr SetRightChild(NodePtr node, NodePtr right) {
-		node->right = right;
-		if (right != nil)
-			right->parent = node;
-		return node;
-	}
-}
-
-
-template<typename KeyType>
-class BinaryTree {
-	typedef BinaryTreeNode<KeyType> Node;
-	typedef std::shared_ptr<Node> NodePtr;
-	std::shared_ptr<Node> nil;  //哨兵
-	std::shared_ptr<Node> root;  //根结点
-
-	//摧毁树
-	void destoryTree(std::shared_ptr<Node> rt) {
-		if (rt != nil) {
-			auto left = rt->left;
-			auto right = rt->right;
-			rt.reset();
-			destoryTree(left);
-			destoryTree(right);
+	NodePtr getNodePtr() {
+		if (self == nullptr) {
+			self = NodePtr(this, deleteNode);
 		}
+		return self;
 	}
-
-	//寻找结点
-	std::shared_ptr<Node> get const (const KeyType &key, std::shared_ptr<Node> rt = root) {
-		if (rt == nil) {
-			return nil;
-		}
-		if (rt->key == key) {
-			return rt;
-		} else {
-			auto left = get(key, rt->left);
-			if (left != nil) {
-				return left;
-			}
-			auto right = get(key, rt->right);
-			if(right != nil) {
-				return right;
-			}
-		}
-	}
-
 
 public:
-	BinaryTree() {
-		nil = std::make_shared<Node>();
-		nil->Bind(nil, nil, nil);
-		root = nil;
+	BinaryTree() :
+		Node<KeyType, DataType>(),
+		parent(nil), right(nil), left(nil), root(nil), self(nullptr) {}
+	BinaryTree(const KeyType &key) :
+		Node<KeyType, DataType>(key),
+		parent(nil), right(nil), left(nil), root(nil), self(nullptr) {}
+	~BinaryTree() {}
+
+	NodePtr GetRoot() {
+		if (root == nil && parent == nil) {
+			root = getNodePtr();
+		}
+		if (root->parent != nil) {
+			root = parent->GetRoot();
+		}
+		return root;
 	}
 
-	BinaryTree(const KeyType &k) : BinaryTree() {
-		root = NewNode(k);
+	NodePtr GetLeftChild() const {
+		return left;
 	}
 
-	std::shared_ptr<Node> SetRoot(NodePtr node) {
-
+	NodePtr GetRightChild() const {
+		return right;
 	}
 
-	std::shared_ptr<Node> NewNode(
-		const KeyType &key,
-		std::shared_ptr<Node> p = nil,
-		std::shared_ptr<Node> l = nil,
-		std::shared_ptr<Node> r = nil
-	) {
-		auto node = std::make_shared<Node>(p, l, r);
-		node->key = key;
-		return node;
+	NodePtr SetLeftChild(KeyType key) {
+		auto child = newChild(key);
+		return SetLeftChild(child);
 	}
 
-	~BinaryTree() {
-		destoryTree(root);
+	NodePtr SetRightChild(KeyType key) {
+		auto child = newChild(key);
+		return SetRightChild(child);
+	}
+
+	NodePtr SetLeftChild(NodePtr child) {
+		if (child->parent == nil && left == nil) {
+			left = child;
+			child->parent = getNodePtr();
+		}
+		return getNodePtr();
+	}
+	NodePtr SetRightChild(NodePtr child) {
+		if (child->parent == nil && right == nil) {
+			right = child;
+			child->parent = getNodePtr();
+		}
+		return getNodePtr();
+	}
+
+	KeyType GetKey() const {
+		return this->key;
 	}
 
 };
+
+template<typename KeyType, typename DataType>
+BinaryTree<KeyType, DataType> BinaryTree<KeyType, DataType>::nilNode;
+
+template<typename KeyType, typename DataType>
+std::shared_ptr<BinaryTree<KeyType, DataType>>
+BinaryTree<KeyType, DataType>::nil = NodePtr(
+	&BinaryTree<KeyType, DataType>::nilNode,
+	BinaryTree<KeyType, DataType>::deleteNode
+);
