@@ -18,6 +18,10 @@ void testBinaryTree() {
 	std::cout << t1.GetRightChild()->GetRoot()->GetKey() << std::endl;
 	t1.PreOrderPrint();
 	std::cout << std::endl;
+	t1.MidOrderPrint();
+	std::cout << std::endl;
+	t1.PostOrderPrint();
+	std::cout << std::endl;
 }
 
 void testQueue1() {

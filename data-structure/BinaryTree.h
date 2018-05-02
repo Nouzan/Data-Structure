@@ -106,6 +106,28 @@ public:
 		}
 	}
 
+	void MidOrderPrint(NodePtr node = nullptr) {
+		if (node == nullptr) {
+			node = GetNodePtr();
+		}
+		if (node != nil) {
+			MidOrderPrint(node->left);
+			std::cout << node->GetKey();
+			MidOrderPrint(node->right);
+		}
+	}
+
+	void PostOrderPrint(NodePtr node = nullptr) {
+		if (node == nullptr) {
+			node = GetNodePtr();
+		}
+		if (node != nil) {
+			PostOrderPrint(node->left);
+			PostOrderPrint(node->right);
+			std::cout << node->GetKey();
+		}
+	}
+
 };
 
 template<typename KeyType, typename DataType>
