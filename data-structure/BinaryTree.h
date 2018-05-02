@@ -101,7 +101,7 @@ public:
 			node = GetNodePtr();
 		}
 		if (node != nil) {
-			std::cout << node->GetKey();
+			std::cout << node->GetKey() << " ";
 			PreOrderPrint(node->left);
 			PreOrderPrint(node->right);
 		}
@@ -113,7 +113,7 @@ public:
 		}
 		if (node != nil) {
 			MidOrderPrint(node->left);
-			std::cout << node->GetKey();
+			std::cout << node->GetKey() << " ";
 			MidOrderPrint(node->right);
 		}
 	}
@@ -125,7 +125,7 @@ public:
 		if (node != nil) {
 			PostOrderPrint(node->left);
 			PostOrderPrint(node->right);
-			std::cout << node->GetKey();
+			std::cout << node->GetKey() << " ";
 		}
 	}
 
@@ -138,7 +138,7 @@ public:
 		while (!queue.IsEmpty()) {
 			auto tmp = queue.DeQueue();
 			if (tmp != nil) {
-				std::cout << tmp->GetKey();
+				std::cout << tmp->GetKey() << " ";
 				queue.EnQueue(tmp->left);
 				queue.EnQueue(tmp->right);
 			}

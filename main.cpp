@@ -1,6 +1,6 @@
 #include<iostream>
 #include<memory>
-#include"data-structure/Stack.h"
+#include "data-structure/Stack.h"
 #include "data-structure/Queue.h"
 #include "data-structure/LinkList.h"
 #include "data-structure/Node.h"
@@ -9,20 +9,21 @@
 #include "data-structure/BinaryTree.h"
 
 void testBinaryTree() {
-	BinaryTree<char> t1('A'), t2('C');
-	t1.SetLeftChild('B');
-	t2.SetRightChild('D');
-	std::cout << t2.GetRoot()->GetKey() << std::endl;
-	t1.SetRightChild(t2);
-	std::cout << t1.GetKey() << std::endl;
-	std::cout << t1.GetRightChild()->GetRoot()->GetKey() << std::endl;
-	t1.PreOrderPrint();
+	BinaryTree<int> T[11] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+	T[0].SetLeftChild(T[1])->SetRightChild(T[2]);
+	T[1].SetRightChild(T[3]);
+	T[2].SetLeftChild(T[4])->SetRightChild(T[5]);
+	T[3].SetLeftChild(T[6])->SetRightChild(T[7]);
+	T[4].SetRightChild(T[8]);
+	T[5].SetLeftChild(T[9]);
+	T[8].SetLeftChild(T[10]);
+	T[0].PreOrderPrint();
 	std::cout << std::endl;
-	t1.MidOrderPrint();
+	T[0].MidOrderPrint();
 	std::cout << std::endl;
-	t1.PostOrderPrint();
+	T[0].PostOrderPrint();
 	std::cout << std::endl;
-	t1.LevelOrderPrint();
+	T[0].LevelOrderPrint();
 	std::cout << std::endl;
 }
 
