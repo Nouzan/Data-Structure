@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "LinkQueue.h"
+#include "FindSet.h"
 using namespace std;
 
 //默认以非负整数作为关键字，待以后编写了Map类，再扩展为可用任意类型作为关键字
@@ -11,6 +12,42 @@ struct Edge {
 	int weight;
 	Edge *nextEdge;
 };
+
+bool cmpWeight(Edge &a, Edge &b) {
+	if (a.weight < b.weight) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+template<typename T>
+int partition(T *A, int p, int q, bool (*cmp)(T&, T&)) {
+	T x = A[q];
+	int i, j = p - 1;
+	for (i = p; i < q; i ++) {
+		if(cmp(A[i], x)) {
+			j++;
+			T tmp = A[j];
+			A[j] = A[i];
+			A[i] = tmp;
+		}
+	}
+	j++;
+	T tmp = A[j];
+	A[j] = A[q];
+	A[q] = tmp;
+	return j;
+}
+
+template<typename T>
+void QuickSort(T *A, int p, int q, bool (*cmp)(T&, T&)) {
+	if (p < q) {
+		int r = partition(A, p, q, cmp);
+		QuickSort(A, p, r - 1, cmp);
+		QuickSort(A, r + 1, q, cmp);
+	}
+}
 
 template<typename T>
 struct Vertex {
@@ -24,11 +61,17 @@ class Graph {
 private:
 	const static int maxSize = 100000;
 	Vertex<T> vertexList[maxSize];
+	Edge edgeList[maxSize];
 	int vertexNum;
+	int edgeNum;
 	bool isDirect;
 	// int edgeNum;
+	Edge *getNewEdge() {
+		return &edgeList[edgeNum++];
+	}
+
 	void addEdge(Edge e, bool isReverse = false) {
-		Edge *newEdge = new Edge();
+		Edge *newEdge = getNewEdge();
 		int u;
 
 		if (!isReverse) {
@@ -106,17 +149,7 @@ public:
 		}
 	}
 
-	~Graph() {
-		for(int i = 0; i < vertexNum; i ++) {
-			Edge *edge = vertexList[i].firstEdge;
-			while(edge != NULL) {
-				Edge *deleteEdge = edge;
-				edge = edge->nextEdge;
-				delete deleteEdge;
-			}
-			cout << endl;
-		}
-	}
+	~Graph() {}
 
 	void AddEdge(Edge e) {
 		addEdge(e);
@@ -190,6 +223,42 @@ public:
 		delete[] color;
 	}
 
+	int Kruskal() {
+		FindSet<int> *vSet = new FindSet<int>[vertexNum];
+		int result = 0;
+
+		for (int i = 0; i < vertexNum; i ++) {
+			vSet[i].Set(i);
+		}
+		QuickSort(edgeList, 0, edgeNum - 1, cmpWeight);
+		for (int i = 0; i < edgeNum; i ++) {
+			int u = edgeList[i].from;
+			int v = edgeList[i].to;
+
+			if (vSet[u].Find().Get() != vSet[v].Find().Get()) {
+				cout << "<" << vertexList[u].value << ", " << edgeList[i].weight << ", " << vertexList[v].value << ">" << " ";
+				vSet[u].Union(vSet[v]);
+				result += edgeList[i].weight;
+			}
+		}
+		cout << endl;
+		return result;
+	}
+
+	void relaxtion(int u, int *pre, int *d) {
+		for (Edge *e = vertexList[u].firstEdge; e != NULL; e = e->nextEdge) {
+			int v = e->to;
+			if (d[v] > d[u] + e->weight) {
+				d[v] = d[u] + e->weight;
+				pre[v] = u;
+			}
+		}
+	}
+
+	void Dijkstra(int s, int *pre, int *d) {
+		
+	}
+
 };
 
 int main() {
@@ -197,22 +266,24 @@ int main() {
 	Edge B[3];
 	B[0].from = 0;
 	B[0].to = 1;
+	B[0].weight = 5;
 	B[1].from = 1;
 	B[1].to = 2;
+	B[1].weight = 4;
 	B[2].from = 3;
 	B[2].to = 2;
-	Graph<char> G(A, 5, B, 3, true);
+	B[2].weight = 6;
+
+	Graph<char> G(A, 5, B, 3);
 	G.AddEdge(2, 4, 5);
-	G.AddEdge(4, 3);
+	G.AddEdge(4, 3, 2);
 	G.ShowAL();
 
 	int pre[5], f[5];
 
 	G.DFSPrint(pre, f);
 
-	for(int i = 0; i < 5; i ++) {
-		cout << A[i] << ": " << f[i] << endl;
-	}
+	cout << G.Kruskal() << endl;
 
 	return 0;
 }
