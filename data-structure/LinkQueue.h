@@ -5,7 +5,7 @@
 
 template<typename T>
 class LinkQueue {
-	std::shared_ptr<LinkListNode<T>> head, tail;
+	std::shared_ptr<LinkListNode<T> > head, tail;
 	LinkList<T> linkList;
 
 	void updateHeadTail() {

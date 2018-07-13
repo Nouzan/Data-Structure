@@ -2,6 +2,7 @@
 #include <iostream>
 #include "LinkQueue.h"
 #include "FindSet.h"
+#include "Heap.h"
 using namespace std;
 
 //默认以非负整数作为关键字，待以后编写了Map类，再扩展为可用任意类型作为关键字
@@ -50,11 +51,38 @@ void QuickSort(T *A, int p, int q, bool (*cmp)(T&, T&)) {
 }
 
 template<typename T>
+int GetMinInQ(T *A, bool *Q, int num, bool (*cmp)(T&, T&)) {
+	int min;
+	for(int i = 0; i < num; i ++) {
+		if (Q[i]) {
+			min = i;
+			break;
+		}
+	}
+	for (int i = min + 1; i < num; i ++) {
+		if (!Q[i]) {
+			continue;
+		}
+		if (cmp(A[i], A[min])) {
+			min = i;
+		}
+	}
+	Q[min] = false;
+	return min;
+}
+
+template<typename T>
 struct Vertex {
 	T value;
 	int edgeNum;
+	int d;
 	Edge *firstEdge;
 };
+
+template<typename T>
+bool cmpDistance(Vertex<T>& a, Vertex<T>& b) {
+	return a.d < b.d;
+}
 
 template<typename T>
 class Graph {
@@ -245,45 +273,79 @@ public:
 		return result;
 	}
 
-	void relaxtion(int u, int *pre, int *d) {
+	void relaxtion(int u, int *pre) {
 		for (Edge *e = vertexList[u].firstEdge; e != NULL; e = e->nextEdge) {
 			int v = e->to;
-			if (d[v] > d[u] + e->weight) {
-				d[v] = d[u] + e->weight;
+			if (vertexList[v].d > vertexList[u].d + e->weight) {
+				vertexList[v].d = vertexList[u].d + e->weight;
 				pre[v] = u;
 			}
 		}
 	}
 
 	void Dijkstra(int s, int *pre, int *d) {
-		
+		bool *Q = new bool[vertexNum];
+		int len = vertexNum;
+		for (int i = 0; i < vertexNum; i ++) {
+			vertexList[i].d = 2147483647;
+			Q[i] = true;
+			pre[i] = -1;
+		}
+		vertexList[s].d = 0;
+
+		while(len > 0) {
+			int t = GetMinInQ(vertexList, Q, vertexNum, cmpDistance);
+			// cout << t << endl;
+			len --;
+			relaxtion(t, pre);
+		}
+
+		for (int i = 0; i < vertexNum; i ++) {
+			d[i] = vertexList[i].d;
+		}
+
+		delete[] Q;
 	}
 
 };
 
-int main() {
-	char A[5] = {'A', 'B', 'C', 'D', 'E'};
-	Edge B[3];
-	B[0].from = 0;
-	B[0].to = 1;
-	B[0].weight = 5;
-	B[1].from = 1;
-	B[1].to = 2;
-	B[1].weight = 4;
-	B[2].from = 3;
-	B[2].to = 2;
-	B[2].weight = 6;
-
-	Graph<char> G(A, 5, B, 3);
-	G.AddEdge(2, 4, 5);
-	G.AddEdge(4, 3, 2);
-	G.ShowAL();
-
-	int pre[5], f[5];
-
-	G.DFSPrint(pre, f);
-
-	cout << G.Kruskal() << endl;
-
-	return 0;
-}
+// int main() {
+// 	char A[5] = {'A', 'B', 'C', 'D', 'E'};
+// 	Edge B[3];
+// 	B[0].from = 0;
+// 	B[0].to = 1;
+// 	B[0].weight = 5;
+// 	B[1].from = 1;
+// 	B[1].to = 2;
+// 	B[1].weight = 4;
+// 	B[2].from = 3;
+// 	B[2].to = 2;
+// 	B[2].weight = 6;
+//
+// 	Graph<char> G(A, 5, B, 3);
+// 	G.AddEdge(2, 4, 5);
+// 	G.AddEdge(4, 3, 2);
+// 	G.ShowAL();
+//
+// 	int pre[5], f[5], d[5];
+//
+// 	G.DFSPrint(pre, f);
+//
+// 	cout << G.Kruskal() << endl;
+//
+// 	//int pre[5];
+// 	G.Dijkstra(0, pre, d);
+// 	for (int i = 0; i < 5; i ++) {
+// 		cout << pre[i] << " ";
+// 	}
+//
+// 	cout << endl;
+//
+// 	for (int i = 0; i < 5; i ++) {
+// 		cout << d[i] << " ";
+// 	}
+//
+// 	cout << endl;
+//
+// 	return 0;
+// }
